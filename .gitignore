@@ -1,3 +1,11 @@
+# images
+*.jpg
+*.png
+*.jpeg
+
+# database
+*.db
+Playlists/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -80,6 +88,7 @@ target/
 # IPython
 profile_default/
 ipython_config.py
+.idea
 
 # pyenv
 .python-version
@@ -91,12 +100,8 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
-
-# Celery stuff
+# celery beat schedule file
 celerybeat-schedule
-celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
@@ -127,3 +132,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+DataScience/Models/BERT/multi_cased_L-12_H-768_A-12/bert_model.ckpt.data-00000-of-00001
+FindahApp/vectors_clean.json
+vectors.json
+FindahApp/books_clean.json
