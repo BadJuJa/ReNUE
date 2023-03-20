@@ -6,7 +6,6 @@
 # database
 *.db
 Playlists/
-resources/d_ui/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
