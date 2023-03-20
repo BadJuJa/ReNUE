@@ -26,13 +26,17 @@ class Playlist(QWidget, Ui_main_widget):
 
         self.audio_list_edit = None
 
+        # Поля для бэкапа данных
         self.old_name = "" if self.new else self.lineEdit_name.text()
         self.old_list = [] if self.new else self.get_audio_list()
         self.old_pixmap = QPixmap(":/icons/assets/no-photo.png") if self.new else self.label_image.pixmap()
+
+        # Дефолтные параметры для новых плейлистов
         if self.new:
             self.listWidget_audio.addItems([""] * 11)
             self.label_image.setPixmap(QPixmap(":/icons/assets/no-photo.png"))
 
+        # Устанавливаем начальные состояния кнопок
         self.button_edit.setEnabled(not self.new)
         self.button_play.setEnabled(not self.new)
         self.button_shuffle.setEnabled(not self.new)
@@ -95,6 +99,7 @@ class Playlist(QWidget, Ui_main_widget):
 
     # Заполняет виджет информацией о плейлисте (название, превью, список песен)
     def load_playlist(self, playlist_name):
+        # Получает плейлист из бд по имени
         path, name, icon = self.main_window_ref.db.get_playlist(playlist_name)
         s_list = utils.CsvControl.read_from_file(path)
 
@@ -113,14 +118,14 @@ class Playlist(QWidget, Ui_main_widget):
     # Сохраняет плейлист
     def save(self):
         playlists_folder = os.path.join(os.getcwd(), "Playlists")
-        # CREATE PLAYLIST FOR SAVE
         new_playlist = QMediaPlaylist()
-        ts = self.get_audio_list()
+        ts = self.get_audio_list() # список аудио в плейлисте питоновским листом
         for s in ts:
             p = self.main_window_ref.db.get_audio(s)
             new_playlist.addMedia(QMediaContent(QUrl.fromLocalFile(p)))
 
         if self.new:
+            # Создаётся новый плейлист и добавляется в базу
             dir_ = os.path.join(playlists_folder, self.lineEdit_name.text())
             new_playlist.save(QUrl().fromLocalFile(dir_ + '.m3u'), "m3u")
             csv = utils.CsvControl.write_to_file(ts, dir_)
@@ -129,10 +134,11 @@ class Playlist(QWidget, Ui_main_widget):
             im_path = image_path + ".png" if success else ""
             self.main_window_ref.db.add_playlist(self.lineEdit_name.text(), csv, im_path)
         else:
-
+            # Или обновляется информация о старом
             old_csv = self.main_window_ref.db.get_playlist(self.old_name)[0]
             new_file_path = os.path.join(playlists_folder, self.lineEdit_name.text())
 
+            # Удаление старых файлов и замена новыми
             if os.path.exists(old_csv):
                 os.remove(old_csv)
             csv = utils.CsvControl.write_to_file(ts, new_file_path)
@@ -149,16 +155,16 @@ class Playlist(QWidget, Ui_main_widget):
                 os.remove(old_png)
 
             image_path = os.path.join(icons_path, self.lineEdit_name.text())
-            # os.remove(os.path.join(icons_path, self.old_name + ".png"))
             success = self.label_image.pixmap().save(image_path + ".png", "png")
             im_path = image_path + ".png" if success else ""
             self.main_window_ref.db.update_playlist(self.old_name, self.lineEdit_name.text(), csv, im_path)
 
+        # сохранение изменений в бд
         self.main_window_ref.db.save_changes()
 
         self.changes_saved = True
         self.backup_done = False
-        self.main_window_ref.fill_playlists_table()
+        self.main_window_ref.fill_playlists_table() # перезаполнение таблицы в основном окне
         self.close()
 
     # Открывает виджет изменения списка аудио в плейлисте
@@ -222,14 +228,17 @@ class Playlist(QWidget, Ui_main_widget):
         if result == 0:
             return
 
+        # получаем пути к файлам
         old_csv = self.main_window_ref.db.get_playlist(self.lineEdit_name.text())[0]
         dir_ = os.path.dirname(old_csv)
         old_m3u = os.path.join(dir_, self.lineEdit_name.text() + ".m3u")
         old_png = os.path.join(dir_, "icons", self.lineEdit_name.text() + ".png")
 
+        # удаляем плейлист из базы
         self.main_window_ref.db.remove_playlist(self.lineEdit_name.text())
         self.main_window_ref.db.save_changes()
 
+        # удаляем файлы плейлиста с диска
         if os.path.exists(old_csv):
             os.remove(old_csv)
         if os.path.exists(old_m3u):

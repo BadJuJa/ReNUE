@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (QApplication)
 
 from gui.main_window import MainWindow
 
-
+# Создаёт экземпляр класса главного виджета
 def main():
     app = QApplication(sys.argv)
     window = MainWindow()

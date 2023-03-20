@@ -7,19 +7,20 @@ class Ui_mainWidget(object):
     def setupUi(self, mainWidget):
         mainWidget.setObjectName("mainWidget")
         mainWidget.resize(687, 480)
-        mainWidget.setStyleSheet("color: rgb(255, 255, 255);\n"
-"                font: 75 13pt \"Century Gothic\";\n"
-"                selection-background-color: rgb(188, 188, 188);\n"
-"                selection-color: rgb(0, 0, 0);\n"
-"                border-color: rgb(15, 15, 15);\n"
-"                background-color: rgb(63, 63, 63);\n"
-"                alternate-background-color: rgb(188, 188, 188);\n"
-"\n"
-"                QMenuBar::item:selected {\n"
-"                background-color: rgb(188, 188, 188);\n"
-"                color: rgb(0, 0, 0);\n"
-"                }\n"
-"            ")
+        mainWidget.setStyleSheet(
+            "color: rgb(255, 255, 255);\n"
+            "font: 75 13pt \"Century Gothic\";\n"
+            "selection-background-color: rgb(188, 188, 188);\n"
+            "selection-color: rgb(0, 0, 0);\n"
+            "border-color: rgb(15, 15, 15);\n"
+            "background-color: rgb(63, 63, 63);\n"
+            "alternate-background-color: rgb(188, 188, 188);\n"
+            "\n"
+            "QMenuBar::item:selected {\n"
+            "background-color: rgb(188, 188, 188);\n"
+            "color: rgb(0, 0, 0);\n"
+            "}\n"
+            )
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(mainWidget)
         self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_2.setSpacing(0)
@@ -35,17 +36,18 @@ class Ui_mainWidget(object):
         self.listWidget_from.setObjectName("listWidget_from")
         self.horizontalLayout_2.addWidget(self.listWidget_from)
         self.widget = QtWidgets.QWidget(self.widget_top)
-        self.widget.setStyleSheet("QPushButton {\n"
-"background-color: rgb(60, 60, 60);\n"
-"border: 1px solid rgb(188, 188, 188);\n"
-"border-radius: 25%;\n"
-"font-size: 16pt;\n"
-"}\n"
-"QPushButton:hover{\n"
-"background-color: rgb(188, 188, 188);\n"
-"color: rgb(0, 0, 0);\n"
-"}\n"
-"                    ")
+        self.widget.setStyleSheet(
+            "QPushButton {\n"
+            "background-color: rgb(60, 60, 60);\n"
+            "border: 1px solid rgb(188, 188, 188);\n"
+            "border-radius: 25%;\n"
+            "font-size: 16pt;\n"
+            "}\n"
+            "QPushButton:hover{\n"
+            "background-color: rgb(188, 188, 188);\n"
+            "color: rgb(0, 0, 0);\n"
+            "}\n"
+            )
         self.widget.setObjectName("widget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -78,17 +80,18 @@ class Ui_mainWidget(object):
         self.horizontalLayout_2.addWidget(self.listWidget_to)
         self.verticalLayout_2.addWidget(self.widget_top)
         self.widget_bottom = QtWidgets.QWidget(mainWidget)
-        self.widget_bottom.setStyleSheet("QPushButton {\n"
-"background-color: rgb(60, 60, 60);\n"
-"border: 1px solid rgb(188, 188, 188);\n"
-"border-radius: 10%;\n"
-"font-size: 16pt;\n"
-"}\n"
-"QPushButton:hover{\n"
-"background-color: rgb(188, 188, 188);\n"
-"color: rgb(0, 0, 0);\n"
-"}\n"
-"                        ")
+        self.widget_bottom.setStyleSheet(
+            "QPushButton {\n"
+            "background-color: rgb(60, 60, 60);\n"
+            "border: 1px solid rgb(188, 188, 188);\n"
+            "border-radius: 10%;\n"
+            "font-size: 16pt;\n"
+            "}\n"
+            "QPushButton:hover{\n"
+            "background-color: rgb(188, 188, 188);\n"
+            "color: rgb(0, 0, 0);\n"
+            "}\n"
+            )
         self.widget_bottom.setObjectName("widget_bottom")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_bottom)
         self.horizontalLayout.setContentsMargins(4, 4, 4, 4)
@@ -109,7 +112,9 @@ class Ui_mainWidget(object):
 
     def retranslateUi(self, mainWidget):
         _translate = QtCore.QCoreApplication.translate
-        mainWidget.setWindowTitle(_translate("mainWidget", "Form"))
+        mainWidget.setWindowTitle(_translate("mainWidget", ""))
         self.button_ok.setText(_translate("mainWidget", "OK"))
-        self.button_cancel.setText(_translate("mainWidget", "Cancel"))
+        self.button_cancel.setText(_translate("mainWidget", "Отмена"))
+
+
 import resources_rc

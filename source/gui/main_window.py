@@ -26,11 +26,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         utils.create_subfolders()
         self.setupUi(self)
         self.audio_paths = []
-        # region Подключение базы данных
+        # Подключение базы данных
         self.db = Database('data.db')
+
         self.player = MediaPlayer(self)
         self.scan_audio()
-        # endregion
 
         # region Дополнительная настройка интерфейса
         self.setWindowFlag(Qt.FramelessWindowHint)
@@ -101,9 +101,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event):
         self.db.connection_close()
+
     # endregion
 
-    # Переключение в полноэкранный режим
+    # Переключение в полноэкранный режим и обратно
     def toggle_maximize(self):
         if not self.maximized:
             self.showMaximized()
@@ -112,7 +113,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.showNormal()
             self.maximized = not self.maximized
 
-    # Подключение сигналов
+    # Подключение сигналов к методам
     def connect_signals(self):
         # Нажатие кнопок
         self.button_menu.clicked.connect(self.qm_popup)
@@ -145,39 +146,41 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
         self.tableWidget_playlists_table.cellDoubleClicked.connect(self.show_playlist_widget)
 
-        # Другие сигланы
+        # Кастомные сигналы
         self.settingsWidget.signal_selectionColorChanged.connect(self.change_selection_color)
 
     # Сканирование аудио в папках, указанных в настройках
     def scan_audio(self):
-        self.db.clear_audio_table()
-        self.tableWidget_all_audio.clearContents()
-        self.audio_paths.clear()
+        self.db.clear_audio_table()  # очистка таблицы с аудио в базе
+        self.tableWidget_all_audio.clearContents()  # очистка таблицы с аудио в интефрейсе
+        self.audio_paths.clear()  # очистка внутреннего листа
 
-        paths = self.db.get_paths()
+        paths = self.db.get_paths()  # получение путей для сканирования из базы
         if len(paths) < 1:
             self.lcdNumber.display(0)
             return
 
+        # Проходка по путям
         for path in paths:
             for dirpath, _, files in os.walk(path):
                 for file in files:
                     if fnmatch.fnmatch(file, '*.mp3'):
                         file_name = pathlib.Path(file).name
                         file_path = os.path.join(dirpath, file)
-                        self.db.add_audio(file_name, file_path)
+                        self.db.add_audio(file_name, file_path) # запись названия и пути к аудио в базу
 
-        self.db.save_changes()
-        db_audio = self.db.get_all_audio()
+        self.db.save_changes() # Сохранение внесенных в базу изменений
+        db_audio = self.db.get_all_audio() # Вытаскиваем все названия аудиофайлов из базы
 
         self.tableWidget_all_audio.setRowCount(len(db_audio))
 
+        # проходим по названиям, добавляем их в таблицу
         for row in range(len(db_audio)):
             item = QTableWidgetItem(db_audio[row][0])
             self.tableWidget_all_audio.setItem(row, 0, item)
             self.audio_paths.append(db_audio[row][1])
 
-        self.lcdNumber.display(len(db_audio))
+        self.lcdNumber.display(len(db_audio)) # изменяем отображаемое число треков
 
     # Открытие виджета настроек
     def showSettingsWidget(self):
@@ -204,16 +207,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             point.setY(point.y() - (qm_height + offset))
         self.qMenu.popup(point)
 
-    # Определение всплывающего меню
+    # Создание меню и привязка к нему событий
     def main_menu_setup(self):
         self.qMenu = QMenu(self.button_menu)
 
         settingsAction = QAction(self.qMenu)
-        settingsAction.setText("Preferences")
+        settingsAction.setText("Настройки")
         settingsAction.triggered.connect(self.showSettingsWidget)
 
         exitAction = QAction(self.qMenu)
-        exitAction.setText("Exit")
+        exitAction.setText("Выход")
         exitAction.triggered.connect(self.close)
 
         rescanAction = QAction(self.qMenu)
@@ -259,8 +262,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         for row in range(rows):
             add_playlist(p_list[row], row)
+
     # endregion
 
+    # Смена иконки у кнопки паузы
     def change_play_button_icon(self, x):
         icon = QIcon()
         match x:
@@ -271,6 +276,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.button_play_pause.setIcon(icon)
 
+    # Смена иконки и стиля кнопки повтора
     def change_repeat_button_icon(self, x):
         icon = QIcon()
         match x:
@@ -291,6 +297,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                                  "QPushButton:hover{\n""background-color: rgb(188, 188, 188);\n""}")
         self.button_repeat.setIcon(icon)
 
+    # Смена цвета выделения в таблицах
     def change_selection_color(self, color):
         color = QColor.fromRgb(*color)
         styleString = "QTableWidget::item::selected {background-color: " + color.name() + "};"
