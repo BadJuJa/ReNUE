@@ -1,7 +1,4 @@
 # images
-*.jpg
-*.png
-*.jpeg
 
 # database
 *.db
